@@ -5,17 +5,22 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ListItemColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -38,63 +43,115 @@ import com.example.aluvery.ui.theme.AluveryTheme
 import com.example.aluvery.ui.theme.Purple500
 import com.example.aluvery.ui.theme.Purple80
 import com.example.aluvery.ui.theme.Teal200
+import androidx.compose.foundation.layout.Spacer as Spacer
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            Surface {
+                ProductsSection()
 
+            }
         }
     }
 
     @Composable
-    @Preview(showBackground = true)
-    fun ProductItem() {
+    fun ProductsSection() {
         Column {
-            Modifier
-                .height(250.dp)
-                .width(200.dp)
-            Box(
+            Text(
+                text = "Promoções",
+                Modifier.padding(
+                    start = 16.dp,
+                    top = 16.dp,
+                    end = 16.dp
+                ),
+                fontSize = 20.sp,
+                fontWeight = FontWeight(400)
+            )
+            Row(
                 Modifier
-                    .height(100.dp)
-                    .background(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                Purple500,
-                                Teal200
-                            )
-                        )
+                    .padding(
+                        top = 8.dp,
+                        bottom = 16.dp
                     )
                     .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Image(
-                    painterResource(id = R.drawable.ic_launcher_background),
-                    contentDescription = null,
-                    Modifier
-                        .size(100.dp)
-                        .offset(y = 50.dp)
-                        .clip(shape = CircleShape)
-                        .align(BottomCenter)
-                )
+                Spacer(Modifier)
+                ProductItem()
+                ProductItem()
+                ProductItem()
+                Spacer(Modifier)
             }
-            Spacer(modifier = Modifier.height(50.dp))
-            Column(Modifier.padding(16.dp)) {
-                Text(
-                    text = LoremIpsum(words = 50).values.first(),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight(700),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = "R$ 19,99",
-                    Modifier.padding(top = 8.dp),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight(400)
-                )
-            }
-
         }
+    }
+
+    @Composable
+    fun ProductItem() {
+        Surface(
+            shape = RoundedCornerShape(15.dp),
+            shadowElevation = 4.dp
+        ) {
+            Column(
+                Modifier
+                    .heightIn(250.dp, 300.dp)
+                    .width(200.dp)
+            ) {
+                val imageSize = 100.dp
+                Box(
+                    modifier = Modifier
+                        .height(imageSize)
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    Purple500, Teal200
+                                )
+                            )
+                        )
+                        .fillMaxWidth()
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                        contentDescription = null,
+                        Modifier
+                            .size(imageSize)
+                            .offset(y = imageSize / 2)
+                            .clip(shape = CircleShape)
+                            .align(BottomCenter)
+                    )
+                }
+                Spacer(modifier = Modifier.height(imageSize / 2))
+                Column(Modifier.padding(16.dp)) {
+                    Text(
+                        text = LoremIpsum(50).values.first(),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight(700),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = "R$ 14,99",
+                        Modifier.padding(top = 8.dp),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight(400)
+                    )
+                }
+            }
+        }
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    private fun ProductsSectionPreview() {
+        ProductsSection()
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    private fun ProductItemPreview() {
+        ProductItem()
     }
 }
 
